@@ -8,3 +8,4 @@
 
   - [ ] Setup CI/CD pipeline on github
   - [ ] Setup CI/CD with Kuberentes using [fluxcd](https://toolkit.fluxcd.io/)
+  - [ ] Add TLS support in the toy cluster
