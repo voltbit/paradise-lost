@@ -1,4 +1,4 @@
-# paradise-lost
-Repo with knowledge
+## Paradise Lost
 
-The repository is intended to host only wiki pages, but it might as well have working code examples or other software.
+Umbrella repository for training, wargames, fun coding, project sketches.
+
