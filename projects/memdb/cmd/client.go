@@ -5,6 +5,9 @@ type MemdbClient struct {
 	logFile string
 }
 
-func (t MemdbClient) NewClient() {
-
+func NewClient(addr string, logFile string) *MemdbClient {
+	return &MemdbClient{
+		addr:    addr,
+		logFile: logFile,
+	}
 }

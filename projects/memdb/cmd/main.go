@@ -10,6 +10,7 @@ var (
 	InfoLogger    *log.Logger
 	WarningLogger *log.Logger
 	ErrorLogger   *log.Logger
+	server        *MemdbServer
 )
 
 func init() {
@@ -20,8 +21,10 @@ func init() {
 	InfoLogger = log.New(io.MultiWriter(os.Stdout, logFile), "[INFO]", log.Ldate|log.Ltime|log.Lshortfile)
 	WarningLogger = log.New(io.MultiWriter(os.Stdout, logFile), "[WARN]", log.Ldate|log.Ltime|log.Lshortfile)
 	ErrorLogger = log.New(io.MultiWriter(os.Stdout, logFile), "[ERROR]", log.Ldate|log.Ltime|log.Lshortfile)
+	server, _ = NewMemdbServer("localhost:9889", "data_file", "log")
 }
 
 func main() {
 	InfoLogger.Println("Initializing memstore")
+	server.Start()
 }
