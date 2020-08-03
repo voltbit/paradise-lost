@@ -56,25 +56,51 @@ func NewMemdbServer(url string, persistenceFileName string, logFileName string) 
 }
 
 func landPage(w http.ResponseWriter, r *http.Request) {
+	// swagger:route GET /
+	// Main landing page
 	fmt.Fprint(w, "Home page of the in-memory database")
 	InfoLogger.Printf("[Request]Method: %s source: %s\n agent: %s", r.Method, r.RemoteAddr, r.UserAgent())
 }
 
 func (m *MemdbServer) uploadText(w http.ResponseWriter, r *http.Request) {
+	// swagger:route POST /api/v1/upload
+	// Uploads text from the message body to the database
+	// Responses:
+	// 200: OK
 	InfoLogger.Printf("[Request]Method: %s source: %s\n", r.Method, r.RemoteAddr)
-	InfoLogger.Println("Received text:\n", r.Body)
+	if r.Body == nil {
+		DebugLogger.Println("no body received")
+	}
 	if r.Body != nil {
 		scanner := bufio.NewScanner(r.Body)
 		scanner.Split(bufio.ScanWords)
 		for scanner.Scan() {
 			m.data[scanner.Text()]++
 		}
+		DebugLogger.Println("Data map after insertion", m.data)
 	}
+	w.Write([]byte("OK"))
 }
 
 func (m *MemdbServer) getOccurence(w http.ResponseWriter, r *http.Request) {
-	InfoLogger.Printf("[Request]Method: %s source: %s\n", r.Method, r.RemoteAddr)
-	jsonData, err := json.Marshal(m.data["test"])
+	// swagger:route GET /api/v1/word
+	// Get the number of occurences for a specified word
+	// Produces:
+	// - application/json
+	// swagger:parameters word
+	// min items: 1
+	// in: query
+	InfoLogger.Printf("[Request] Method: %s source: %s\n", r.Method, r.RemoteAddr)
+	words := r.URL.Query()["word"]
+	if len(words) < 1 {
+		InfoLogger.Println("Empty query")
+	}
+	response := make(map[string]int64)
+	for _, word := range words {
+		response[word] = m.data[word]
+	}
+	DebugLogger.Println("Received query: ", words)
+	jsonData, err := json.Marshal(response)
 	if err != nil {
 		ErrorLogger.Println("Could not load query data", err)
 	}
@@ -85,7 +111,19 @@ func (m *MemdbServer) getOccurence(w http.ResponseWriter, r *http.Request) {
 }
 
 func (m *MemdbServer) getAllWords(w http.ResponseWriter, r *http.Request) {
-	res, err := json.Marshal(m.data)
+	// swagger:route GET /api/v1/allwords
+	// Dumps the whole database
+	// Produces:
+	// - application/json
+	var res []byte
+	var err error
+	InfoLogger.Printf("[Request] Method: %s source: %s\n", r.Method, r.RemoteAddr)
+	prettyFlag := r.URL.Query()["pretty"]
+	if len(prettyFlag) > 0 {
+		res, err = json.MarshalIndent(m.data, "", "    ")
+	} else {
+		res, err = json.Marshal(m.data)
+	}
 	if err != nil {
 		// TODO handle this error
 		ErrorLogger.Println("Could not get data", err)
@@ -93,8 +131,6 @@ func (m *MemdbServer) getAllWords(w http.ResponseWriter, r *http.Request) {
 	w.Write(res)
 }
 
-// what happens if I call the method multiple times when receiving a value as struct target?
-// if a new process is created then what happens with the old one
 func (m *MemdbServer) Start() (err error) {
 	InfoLogger.Println("Starting server")
 

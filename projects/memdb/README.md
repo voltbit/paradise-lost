@@ -7,11 +7,11 @@ This is a 'take home' project assignment received as part of a Golang programmer
 ### Tasks
 
     - [ ] API
-        - [ ] Add text to the DB
-        - [ ] Retrieve number of occurences for a particular string
+        - [x] Add text to the DB
+        - [x] Retrieve number of occurences for a particular string
         - [ ] OpenAPI specification (swagger)
     - [ ] Can run as system daemon, integrate with systemd
-    - [ ] Activity log
+    - [x] Activity log
     - [ ] Data dump to file and recovery on restart
     - [ ] HA setup with eventual consistency
     - [ ] Unit test coverage

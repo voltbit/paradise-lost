@@ -30,6 +30,7 @@ func TestUploadFile(t *testing.T) {
 }
 
 func TestGetWord(t *testing.T) {
+	// http://localhost:9889/api/v1/wordcount?word=cubilia&word=eget
 	// testTable = []struct {
 	// 	input    string
 	// 	expected string
