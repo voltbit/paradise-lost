@@ -8,7 +8,7 @@ import (
 	"os"
 )
 
-type MemdbServer struct {
+type MemdbAPIServer struct {
 	addr               string
 	peristenceFileName string
 	logFileName        string
@@ -18,10 +18,11 @@ type MemdbServer struct {
 }
 
 func reloadData() error {
+	// TODO: use mmap here for fun
 	return nil
 }
 
-func NewMemdbServer(url string, persistenceFileName string, logFileName string) (*MemdbServer, error) {
+func NewMemdbAPIServer(url string, persistenceFileName string, logFileName string) (*MemdbAPIServer, error) {
 	var err error
 	if url == "" {
 		url = "localhost:9889"
@@ -32,7 +33,7 @@ func NewMemdbServer(url string, persistenceFileName string, logFileName string) 
 	if persistenceFileName == "" {
 		persistenceFileName = "data_file"
 	}
-	serverObj := &MemdbServer{
+	serverObj := &MemdbAPIServer{
 		addr:               url,
 		peristenceFileName: persistenceFileName,
 		logFileName:        logFileName,
@@ -62,7 +63,7 @@ func landPage(w http.ResponseWriter, r *http.Request) {
 	InfoLogger.Printf("[Request]Method: %s source: %s\n agent: %s", r.Method, r.RemoteAddr, r.UserAgent())
 }
 
-func (m *MemdbServer) uploadText(w http.ResponseWriter, r *http.Request) {
+func (m *MemdbAPIServer) uploadText(w http.ResponseWriter, r *http.Request) {
 	// swagger:route POST /api/v1/upload
 	// Uploads text from the message body to the database
 	// Responses:
@@ -82,7 +83,7 @@ func (m *MemdbServer) uploadText(w http.ResponseWriter, r *http.Request) {
 	w.Write([]byte("OK"))
 }
 
-func (m *MemdbServer) getOccurence(w http.ResponseWriter, r *http.Request) {
+func (m *MemdbAPIServer) getOccurence(w http.ResponseWriter, r *http.Request) {
 	// swagger:route GET /api/v1/word
 	// Get the number of occurences for a specified word
 	// Produces:
@@ -110,7 +111,7 @@ func (m *MemdbServer) getOccurence(w http.ResponseWriter, r *http.Request) {
 	}
 }
 
-func (m *MemdbServer) getAllWords(w http.ResponseWriter, r *http.Request) {
+func (m *MemdbAPIServer) getAllWords(w http.ResponseWriter, r *http.Request) {
 	// swagger:route GET /api/v1/allwords
 	// Dumps the whole database
 	// Produces:
@@ -131,7 +132,7 @@ func (m *MemdbServer) getAllWords(w http.ResponseWriter, r *http.Request) {
 	w.Write(res)
 }
 
-func (m *MemdbServer) Start() (err error) {
+func (m *MemdbAPIServer) Start() (err error) {
 	InfoLogger.Println("Starting server")
 
 	defer func() {
