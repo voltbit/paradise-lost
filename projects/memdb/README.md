@@ -28,6 +28,7 @@ This is a 'take home' project assignment received as part of a Golang programmer
 - Gossip protocol: P2P gRPC; must determine the leader in case of failure; propagate the identity of all nodes in the cluster
 - Replication using log sequence numbers
 - Async communication and data replication between nodes
+- When joining the cluster, a node will get as input a file with existing nodes (Redis CLUSTER MEET)[https://redis.io/commands/cluster-meet]
 
 About design choices and reasoning
 
