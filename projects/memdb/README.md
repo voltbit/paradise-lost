@@ -37,3 +37,4 @@ To learn how the protocol works and because it is easy to map methods and object
 2. The data type used for storing data change log numbers is a plain int64 out of convenience, a more complete solution should look for another data type that is larger or used in combination with a reset mechanism.
 
 https://www.alibabacloud.com/blog/in-depth-analysis-of-redis-cluster-gossip-protocol_594706
+https://cristian.regolo.cc/2015/09/05/life-in-a-redis-cluster.html

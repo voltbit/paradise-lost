@@ -1,0 +1,20 @@
+syntax = "proto3";
+package memdb;
+
+message Node {
+    string id = 1;
+    string url = 2;
+    bool isLeader = 3;
+}
+
+message SyncNodeTableRequest {
+    repeated Node nodes;
+}
+
+message SyncNodeTableResponse {
+    repeated Node nodes;
+}
+
+service NodeSync {
+    rpc SyncNodeTable(SyncNodeTableRequest) returns (SyncNodeTableResponse){}
+}
