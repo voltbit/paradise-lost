@@ -1,0 +1,13 @@
+{
+    "nodes": [
+        {
+            "nodeId": "NODE1",
+            "address": "localhost",
+            "apiPort": "9881",
+            "clusterPort": "50001",
+            "persistenceFile": "/tmp/memdb/node1/data",
+            "logFile": "/tmp/memdb/node1/log",
+            "leader": "true"
+        }
+    ]
+}

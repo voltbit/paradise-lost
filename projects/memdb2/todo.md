@@ -1,0 +1,4 @@
+- [ ] Config file; read and cluster start with different processes
+- [ ] API server on each process; test for response
+- [ ] Promdb setup; have the promdb definitions, generated code and each process listens for gRPC messages
+- [ ] Internal gossip test - have ping messages between nodes working
