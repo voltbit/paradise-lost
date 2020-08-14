@@ -6,6 +6,7 @@ import (
 	"log"
 	"math/rand"
 	"os"
+	"time"
 )
 
 const ID_LENGTH = 8
@@ -36,27 +37,31 @@ func init_logging() {
 	ErrorLogger = log.New(multiWriter, "[ERROR]", log.Ldate|log.Ltime|log.Lshortfile)
 }
 
-func init_node() {
-	node, _ = NewMemdbNode("")
-}
-
 func init() {
 	init_logging()
-	init_node()
 }
 
-// TODO: add to a utility package
-func getRandId(size int) string {
-	id := make([]byte, size)
-	for i := 0; i < size; i++ {
-		id[i] = 'a' + rand.Intn('z'-'a')
+func generateId(length int) string {
+	if length < 1 {
+		length = 10
 	}
-	return ""
+	rand.Seed(int64(time.Now().Nanosecond()))
+	id := make([]rune, length)
+	var letter rune
+	for i := 0; i < length; i++ {
+		if rand.Int()%2 == 0 {
+			letter = 'a'
+		} else {
+			letter = 'A'
+		}
+		id[i] = letter + rune(rand.Intn(26))
+	}
+	return string(id)
 }
 
-func NewMemdbNode(id string) (*MemdbNode, error) {
+func NewMemdbNode(id string, addr string, config map[string]string) (*MemdbNode, error) {
 	// TODO: create a config object based on a file to load all the relevant details
-	apiServer, err := NewMemdbAPIServer("localhost:9889", "data_file", "log")
+	apiServer, err := NewMemdbAPIServer(addr, config["persistencefile"], config["logfile"])
 	if err != nil {
 		ErrorLogger.Println("Memdb node could not initialize API server on node.", err)
 		return nil, err
