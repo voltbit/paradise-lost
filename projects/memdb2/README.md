@@ -1,7 +1,6 @@
-## OUTDATED - check memdb2
 ## Memdb - in-memeory HA database - interview project
 
-This is a 'take home' project assignment received as part of a Golang programmer interview.
+'Take home' project assignment received as part of a Golang programmer job interview.
 
 ---
 
@@ -40,3 +39,9 @@ To learn how the protocol works and because it is easy to map methods and object
 
 https://www.alibabacloud.com/blog/in-depth-analysis-of-redis-cluster-gossip-protocol_594706
 https://cristian.regolo.cc/2015/09/05/life-in-a-redis-cluster.html
+
+### Things to improve
+
+- The log file is opened by both the API routine process and the internal communication routine, I should keep just one file descriptor per process and pass it to the routines - this way it can also use custom CLI colors per node
+- The use of waitgroups is a mess, learn about concurrency pattern in Golang
+- The ping frequency should be configurabel via the cluster config

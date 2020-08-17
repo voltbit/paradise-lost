@@ -1,6 +1,7 @@
 package main
 
 import (
+	"fmt"
 	"sync"
 
 	cfg "./cfg"
@@ -15,7 +16,7 @@ func createCluster(c cfg.NodeConfigs) {
 	for _, conf := range c.Nodes {
 		wg.Add(1)
 		log.InfoLogger.Println("Creating node", conf.NodeId, conf.ApiPort)
-		go node.CreateNode(conf)
+		go node.CreateNode(conf, c)
 	}
 }
 
@@ -32,6 +33,8 @@ func main() {
 	conf := loadConfig("/home/andrei/development/paradise-lost/projects/memdb2/cluster.json")
 	// conf := loadConfig("/home/andrei/development/paradise-lost/projects/memdb2/singleNode.json")
 	log.InfoLogger.Println("Cluster controller started")
+	fmt.Println("Got config:", conf)
+	fmt.Println(conf.Nodes[0].ClusterPort)
 	createCluster(conf)
 	wg.Wait()
 }

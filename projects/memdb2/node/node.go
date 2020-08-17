@@ -7,6 +7,7 @@ import (
 
 	api "../api"
 	cfg "../cfg"
+	cluster "../cluster"
 	log "../logger"
 )
 
@@ -30,8 +31,11 @@ func generateId(length int) string {
 	return string(id)
 }
 
-func createClusterServer() {
-
+func createClusterServer(nodeConfig cfg.NodeConfig, clusterConfig cfg.NodeConfigs) {
+	url := nodeConfig.Address + ":" + nodeConfig.ClusterPort
+	clusterComms := cluster.NewMemdbClusterComms(nodeConfig.NodeId, url)
+	clusterComms.StartServer()
+	clusterComms.StartPinging(2*time.Second, getListOfNodeAddr(clusterConfig))
 }
 
 func createAPIServer(nodeConfig cfg.NodeConfig) {
@@ -43,8 +47,17 @@ func createAPIServer(nodeConfig cfg.NodeConfig) {
 	apiServer.Start()
 }
 
-func CreateNode(nodeConfig cfg.NodeConfig) {
+func getListOfNodeAddr(clusterConfig cfg.NodeConfigs) [][]string {
+	var nodes [][]string
+	for _, node := range clusterConfig.Nodes {
+		nodes = append(nodes, []string{node.NodeId, node.Address + ":" + node.ClusterPort})
+	}
+	return nodes
+}
+
+func CreateNode(nodeConfig cfg.NodeConfig, clusterConfig cfg.NodeConfigs) {
 	wg.Add(2)
 	go createAPIServer(nodeConfig)
+	go createClusterServer(nodeConfig, clusterConfig)
 	wg.Wait()
 }
