@@ -2,9 +2,17 @@ package main
 
 import "fmt"
 
-func CountBits(uint) int {
-	fmt.Println(1 & 0)
-	return 0
+func CountBits(x uint) int {
+	count := 0
+	for x > 0 {
+		if x&1 == 1 {
+			count += 1
+		}
+		x = x >> 1
+	}
+	return count
 }
 
-func main() {}
+func main() {
+	fmt.Println(CountBits(1023))
+}
