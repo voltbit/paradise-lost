@@ -1,0 +1,16 @@
+syntax = "proto3";
+package memdb;
+
+message ElectLeaderRequest {
+    string nodeId = 1;
+    int32 score = 2;
+}
+
+message ElectLeaderResponse {
+    string nodeId = 1;
+    int32 score = 2;
+}
+
+service NodeSync {
+    rpc ElectLeader(ElectLeaderRequest) return (ElectLeaderResponse){}
+}

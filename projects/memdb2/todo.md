@@ -1,0 +1,4 @@
+- [ ] Promdb setup; have the promdb definitions, generated code and each process listens for gRPC messages
+- [ ] Internal gossip test - have ping messages between nodes working
+- [ ] Have data persistence for each process; load the data in memory at startup
+- [ ] API server on each process; test for response
