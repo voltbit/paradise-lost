@@ -22,3 +22,5 @@ it required some setup as to not overlap with the global namespace what was alre
 a separate net namespace and make the proxy part of that namespace but after spending time setting up virtual interfaces,
 bridges and raeding about fallacies of Setns() and Clone() in Golang I decided it takes too long and went for the Docker
 setup.
+
+https://www2.cs.duke.edu/courses/fall16/compsci356/DNS/DNS-primer.pdf

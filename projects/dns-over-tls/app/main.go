@@ -1,7 +1,7 @@
 package main
 
-import "./listener"
+import "./proxy"
 
 func main() {
-	listener.NewDNSListener()
+	proxy.NewDNSTLSProxy()
 }
