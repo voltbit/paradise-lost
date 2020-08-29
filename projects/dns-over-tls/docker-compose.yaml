@@ -1,0 +1,14 @@
+version: '3.2'
+services:
+  dnsproxy:
+    build: .
+    ports:
+      - target: 53
+        published: 11222
+        protocol: udp
+      - target: 53
+        published: 11222
+        protocol: tcp
+    volumes:
+      - ./app:/app
+      - /home/andrei/ssl-key.log:/app/ssl-key.log
