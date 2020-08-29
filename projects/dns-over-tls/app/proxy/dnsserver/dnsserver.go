@@ -1,6 +1,7 @@
 package dnsserver
 
 import (
+	"encoding/binary"
 	"fmt"
 	"net"
 	"sync"
@@ -10,28 +11,40 @@ import (
 	"golang.org/x/net/dns/dnsmessage"
 )
 
-func manageUDPDNSRequest(buf []byte, addr net.Addr, requestCh chan *dnsmessage.Message) {
+func manageUDPDNSRequest(buf []byte, addr net.Addr, conn net.PacketConn, requestCh chan *dnsmessage.Message) {
 	dnsMsg := dnsmessage.Message{}
 	err := dnsMsg.Unpack(buf)
 	tools.CheckError("Could not unpack message", err)
-	fmt.Println(dnsMsg.GoString())
 	requestCh <- &dnsMsg
 	response := <-requestCh
-	fmt.Println("[DNS UDP Server] received answer", response.Answers)
+	buf = make([]byte, 512)
+	buf, err = response.Pack()
+	tools.CheckError("Could not pack data", err)
+	fmt.Println("[DNS UDP Server] received answer:")
+	tools.ShowPackage(response)
+	conn.WriteTo(buf, addr)
 }
 
-func manageTCPDNSRequest(conn net.Conn) {
-	var n int
+func manageTCPDNSRequest(conn net.Conn, requestCh chan *dnsmessage.Message) {
 	var err error
 
 	dnsMsg := dnsmessage.Message{}
 	buf := make([]byte, 512)
-	n, err = conn.Read(buf)
+	_, err = conn.Read(buf)
 	tools.CheckError("Could not read TCP message", err)
-	fmt.Println("Size received", n)
 	err = dnsMsg.Unpack(buf[2:])
 	tools.CheckError("Could not unpack message", err)
-	fmt.Println(dnsMsg.GoString())
+	fmt.Println("[DNS TCP Server] sending request for", dnsMsg.Questions)
+	requestCh <- &dnsMsg
+	response := <-requestCh
+	fmt.Println("Received response:")
+	tools.ShowPackage(response)
+	buf, err = response.Pack()
+	tools.CheckError("Could not pack data", err)
+	buf = append(make([]byte, 2), buf...)
+	binary.BigEndian.PutUint16(buf[:2], uint16(len(buf))-2)
+	_, err = conn.Write(buf)
+	tools.CheckError("Could not write response", err)
 }
 
 func listenUDP(proxyChannel chan chan *dnsmessage.Message, wg *sync.WaitGroup) {
@@ -45,15 +58,13 @@ func listenUDP(proxyChannel chan chan *dnsmessage.Message, wg *sync.WaitGroup) {
 	tools.CheckError("Connection error", err)
 	defer conn.Close()
 	fmt.Println("Listening for DNS messages")
-
 	for {
 		buf := make([]byte, 512)
 		_, addr, err = conn.ReadFrom(buf)
 		tools.CheckError("Read error in UDP DNS server", err)
-
 		requestCh := make(chan *dnsmessage.Message)
 		proxyChannel <- requestCh
-		go manageUDPDNSRequest(buf, addr, requestCh)
+		go manageUDPDNSRequest(buf, addr, conn, requestCh)
 	}
 }
 
@@ -70,7 +81,9 @@ func listenTCP(proxyChannel chan chan *dnsmessage.Message, wg *sync.WaitGroup) {
 	for {
 		conn, err = ln.Accept()
 		tools.CheckError("Could not accept TCP connection", err)
-		go manageTCPDNSRequest(conn)
+		requestCh := make(chan *dnsmessage.Message)
+		proxyChannel <- requestCh
+		go manageTCPDNSRequest(conn, requestCh)
 	}
 }
 

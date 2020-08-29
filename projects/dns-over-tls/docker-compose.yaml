@@ -11,3 +11,4 @@ services:
         protocol: tcp
     volumes:
       - ./app:/app
+      - /home/andrei/ssl-key.log:/app/ssl-key.log
