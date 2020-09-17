@@ -2,10 +2,15 @@
   "name": "dns-over-tls-app",
   "version": "1.0.0",
   "description": "Proxy that can handle UDP and TCP DNS requests and forward them to a DNS-over-TLS server",
-  "main": "app.js",
+  "main": "src/app.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "author": "Andrei Dobre",
-  "license": "GPL-3.0-or-later"
+  "license": "GPL-3.0-or-later",
+  "dependencies": {
+    "cassandra-driver": "latest",
+    "chalk": "latest",
+    "express": "latest"
+  }
 }

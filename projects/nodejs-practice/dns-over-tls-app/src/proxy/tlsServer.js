@@ -1,4 +1,5 @@
-export function startServer() {
+function startServer() {
   console.log('Starting TLS server')
 }
+
 
