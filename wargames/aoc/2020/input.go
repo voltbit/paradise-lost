@@ -9,6 +9,22 @@ import (
 
 func GetIntList(name string) ([]int, error) {
 	var result []int
+	lines, err := GetStringList(name)
+	if err != nil {
+		return nil, err
+	}
+	for _, line := range lines {
+		num, err := strconv.Atoi(string(line))
+		if err != nil {
+			return nil, err
+		}
+		result = append(result, num)
+	}
+	return result, nil
+}
+
+func GetStringList(name string) ([]string, error) {
+	var result []string
 	fh, err := os.Open(name)
 	defer fh.Close()
 	if err != nil {
@@ -23,10 +39,7 @@ func GetIntList(name string) ([]int, error) {
 			}
 			return nil, err
 		}
-		num, err := strconv.Atoi(string(line))
-		if err != nil {
-			return nil, err
-		}
-		result = append(result, num)
+		result = append(result, string(line))
 	}
+	return result, nil
 }

@@ -2,7 +2,7 @@ package main
 
 import "fmt"
 
-func solve(in []int) (int, int) {
+func fixExpenseReport(in []int) (int, int) {
 	sol_1 := 0
 	sol_2 := 0
 	numMap := buildMaps(in)
@@ -32,12 +32,12 @@ func buildMaps(in []int) []int {
 	return numMap
 }
 
-func main() {
+func Day1() {
 	testInput := []int{1721, 979, 366, 299, 675, 1456}
 	input, err := GetIntList("input/day_1")
 	if err != nil {
 		panic(err)
 	}
-	fmt.Println(solve(testInput))
-	fmt.Println(solve(input))
+	fmt.Println(fixExpenseReport(testInput))
+	fmt.Println(fixExpenseReport(input))
 }
