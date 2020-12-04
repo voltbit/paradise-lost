@@ -10,7 +10,7 @@ func getPassportData(input []string) []map[string]string {
 	var passportData []map[string]string
 	passport := make(map[string]string)
 	for i, line := range input {
-		if line == "" || i == len(input)-1 {
+		if len(line) == 0 {
 			passportData = append(passportData, passport)
 			passport = make(map[string]string)
 			continue
@@ -20,9 +20,10 @@ func getPassportData(input []string) []map[string]string {
 			kv := strings.Split(field, ":")
 			passport[kv[0]] = kv[1]
 		}
+		if i == len(input)-1 {
+			passportData = append(passportData, passport)
+		}
 	}
-	// fmt.Printf("Input size: %d\n", len(passportData))
-	// fmt.Println(passportData)
 	return passportData
 }
 
@@ -61,7 +62,6 @@ func processPassport(input []string) (int, int) {
 		for _, checkKey := range checkKeys {
 			if _, found := passport[checkKey]; !found {
 				valid = false
-				// fmt.Printf("Missing: %s in %v\n", checkKey, passport)
 				break
 			}
 		}
@@ -77,7 +77,7 @@ func processPassport(input []string) (int, int) {
 
 func Day4() {
 	fmt.Println("AoC day 4")
-	testInput, err := GetStringList("input/day_4_example")
+	testInput, err := GetStringList("input/day_4_negative")
 	if err != nil {
 		panic(err)
 	}
