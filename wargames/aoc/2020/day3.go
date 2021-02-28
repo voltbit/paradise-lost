@@ -21,7 +21,7 @@ func checkSlope(mapLines []string, right int, down int) int {
 	return treeCount
 }
 
-func solve(mapLines []string) int {
+func slope_checker(mapLines []string) int {
 	slopes := []struct {
 		right int
 		down  int
@@ -42,6 +42,6 @@ func Day3() {
 		panic(err)
 	}
 	fmt.Println("AoC 2020 Day 3")
-	fmt.Println(solve(testData))
-	fmt.Println(solve(data))
+	fmt.Println(slope_checker(testData))
+	fmt.Println(slope_checker(data))
 }
