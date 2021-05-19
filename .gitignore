@@ -1,4 +1,5 @@
 log
-data_file
+**/data_file
 **/testdata
 **/aoc/*/input/*
+**/bin-*
