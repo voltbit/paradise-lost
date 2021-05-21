@@ -1,14 +1,16 @@
 version: '3'
 services:
   postgres:
-    build: .
+    build:
+      context: .
+      args:
+        - NODE_ENV=local
+      dockerfile: docker/postgres.Dockerfile
     container_name: postgres
     ports:
       - "9000:5432"
     environment:
       - DEBUG=false
-      - DB_USER=postgres
-      - DB_PASS=
-      - DB_NAME=
-      - POSTGRES_PASSWORD=${PSQL_BOX_PASS}
-      - POSTGRES_DB=datadb
+      - POSTGRES_USER=tokenuser
+      - POSTGRES_PASSWORD=tokenpass
+      - POSTGRES_DB=tokendb

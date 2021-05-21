@@ -4,13 +4,18 @@ import (
 	pg "github.com/go-pg/pg/v10"
 )
 
+type Token struct {
+	Token string
+	Freq  int
+}
+
 type TokenProcessor struct {
 	DBClient *pg.DB
 }
 
 func NewTokenProcessor(dbUser string, dbPass string, dbName string) (*TokenProcessor, error) {
 	client := pg.Connect(&pg.Options{
-		Addr:     "postgres:5432",
+		Addr:     "localhost:9000",
 		User:     dbUser,
 		Password: dbPass,
 		Database: dbName,
@@ -20,20 +25,21 @@ func NewTokenProcessor(dbUser string, dbPass string, dbName string) (*TokenProce
 	return tp, nil
 }
 
-func (t *TokenProcessor) generateSchema() {
+func (t *TokenProcessor) writeData() error {
 
+	return nil
 }
 
-func (t *TokenProcessor) writeData() {
-
+func (t *TokenProcessor) readFile() error {
+	return nil
 }
 
-func (t *TokenProcessor) readFile() {
-
-}
-
-func (t *TokenProcessor) process() {
-	t.generateSchema()
-	t.readFile()
-	t.writeData()
+func (t *TokenProcessor) start() error {
+	if err := t.readFile(); err != nil {
+		return err
+	}
+	if err := t.writeData(); err != nil {
+		return err
+	}
+	return nil
 }
