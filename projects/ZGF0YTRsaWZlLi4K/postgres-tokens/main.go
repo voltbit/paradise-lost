@@ -6,9 +6,9 @@ import (
 )
 
 func main() {
-	lines := 100
+	lines := 10000000
 	token_len := 7
-	err := generate_file(lines, token_len)
+	err := generateFile(lines, token_len, false)
 	if err != nil {
 		fmt.Printf("Failed to run file generator %v\n", err)
 		os.Exit(1)
@@ -18,7 +18,7 @@ func main() {
 		fmt.Printf("Failed to create token processor: %v\n", err)
 		os.Exit(1)
 	}
-	if err := processor.start(); err != nil {
+	if err := processor.start(token_len); err != nil {
 		fmt.Printf("Failed to start processor: %v\n", err)
 		os.Exit(1)
 	}
