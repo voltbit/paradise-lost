@@ -1,5 +1,3 @@
-"""Commandline utility written as part of an interview take-home task
-"""
 from argparse import ArgumentParser
 from urllib.error import HTTPError
 import urllib.request
