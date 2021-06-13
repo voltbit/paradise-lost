@@ -1,3 +1,6 @@
 [submodule "projects/a2F1c2EK"]
 	path = projects/a2F1c2EK
 	url = git@github.com:voltbit/a2F1c2EK.git
+[submodule "projects/Zm9ybTMK"]
+	path = projects/Zm9ybTMK
+	url = git@github.com:voltbit/Zm9ybTMK.git
