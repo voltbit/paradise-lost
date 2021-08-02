@@ -1,0 +1,14 @@
+namespace: "infra"
+replicas: 1
+configFile: "dummy.yaml"
+dummyContainer:
+  image: sre-dummy-tool:latest
+  imagePullPolicy: IfNotPresent
+  resources:
+    limits:
+      cpu: 100m
+      memory: 256Mi
+    requests:
+      cpu: 60m
+      memory: 128Mi
+

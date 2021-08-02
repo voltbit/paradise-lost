@@ -1,0 +1,8 @@
+# The config file should follow the YAML format
+# loggen: config struct for log generation functionality
+# totalLogOutput: number of log entries put to stdout
+# logSize: size of each log entry, use the powers of two for sizes (kilobytes - K, not kibibytes - Ki)
+logGen:
+  totalLogOutput: 2
+  logSize: "33K"
+

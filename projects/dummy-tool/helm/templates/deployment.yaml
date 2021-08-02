@@ -1,0 +1,39 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  labels:
+  name: "sre-dummy-tool"
+  namespace: {{ .Values.namespace }}
+spec:
+  replicas: {{ .Values.replicas }}
+  strategy:
+    type: RollingUpdate
+    rollingUpdate:
+      maxSurge: 1
+      maxUnavailable: 0%
+  selector:
+    matchLabels:
+      apps: "sre-dummy-tool"
+  template:
+    metadata:
+      annotations:
+        team: "SRE"
+        slack-channel: "#open-sre"
+    spec:
+      imagePullSecrets: {{ toYaml .Values.imagePullSecrets | nindent 8 }}
+      terminationGracePeriodSeconds: {{ .Values.terminationGracePeriodSeconds }}
+      serviceAccountName: {{ .Values.serviceAccount.name }}
+      containers:
+      - name: sre-dummy-tool
+        image: {{ .Values.dummyContainer.image }}
+        imagePullPolicy: {{ .Values.dummyContainer.imagePullPolicy }}
+        resources: {{ toYaml .Values.dummyContainer.resources | nindent 10 }}
+        ports:
+        - containerPort: 1400
+      volumeMounts:
+      - name: main-configuration
+        mountPath: "/usr/local/etc/"
+    volumes:
+    - name: main-configuration
+      configMap:
+        name: sre-dummy-tool-config
