@@ -3,3 +3,8 @@ log
 **/testdata
 **/aoc/*/input/*
 **/bin-*
+projects/ztp/**/debug
+projects/ztp/**/target
+projects/ztp/**/*.rs.bk
+projects/ztp/**/*.pdb
+projects/ztp/**/Cargo.lock
